@@ -77,10 +77,12 @@ def train(config):
                                                          (config["img_w"], config["img_h"]),
                                                          is_training=True),
                                              batch_size=config["batch_size"],
-                                             shuffle=True, num_workers=32, pin_memory=True)
+                                             shuffle=True, pin_memory=True)
 
     # Start the training loop
     logging.info("Start training.")
+    dataset_length = len(dataloader)
+    logging.info(f"Amount of steps in epoch: {dataset_length}")
     for epoch in range(config["epochs"]):
         for step, samples in enumerate(dataloader):
             images, labels = samples["image"], samples["label"]
@@ -128,6 +130,9 @@ def train(config):
                 # net.train(False)
                 _save_checkpoint(net.state_dict(), config)
                 # net.train(True)
+            elif step == dataset_length -1:
+                _save_checkpoint(net.state_dict(), config, epoch=epoch)
+            
 
         lr_scheduler.step()
 
@@ -137,9 +142,12 @@ def train(config):
     logging.info("Bye~")
 
 # best_eval_result = 0.0
-def _save_checkpoint(state_dict, config, evaluate_func=None):
+def _save_checkpoint(state_dict, config, evaluate_func=None, epoch=-1):
     # global best_eval_result
-    checkpoint_path = os.path.join(config["sub_working_dir"], "model.pth")
+    if epoch > 0:
+        checkpoint_path = os.path.join(config["sub_working_dir"], f"epoch-{epoch}-model.pth")
+    else: 
+        checkpoint_path = os.path.join(config["sub_working_dir"], "model.pth")
     torch.save(state_dict, checkpoint_path)
     logging.info("Model checkpoint saved to %s" % checkpoint_path)
     # eval_result = evaluate_func(config)
