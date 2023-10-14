@@ -4,3 +4,11 @@ __pycache__
 coco
 *.pth
 output
+
+.confirm
+
+# Exclude Data
+data/*/
+
+# Exclude Training Results 
+training/*/
