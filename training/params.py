@@ -21,13 +21,13 @@ TRAINING_PARAMS = \
         "type": "sgd",
         "weight_decay": 4e-05,
     },
-    "batch_size": 16,
-    "train_path": "../data/coco/trainvalno5k.txt",
+    "batch_size": 8,
+    "train_path": "../data/conedata/image.list",
     "epochs": 100,
     "img_h": 416,
     "img_w": 416,
-    "parallels": [0,1,2,3],                         #  config GPU device
-    "working_dir": "YOUR_WORKING_DIR",              #  replace with your working dir
+    "parallels": [0],                         #  config GPU device
+    "working_dir": "cone",              #  replace with your working dir
     "pretrain_snapshot": "",                        #  load checkpoint
     "evaluate_type": "", 
     "try": 0,
